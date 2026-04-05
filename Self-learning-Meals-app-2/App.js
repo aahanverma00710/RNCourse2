@@ -12,6 +12,8 @@ import FavoritesScreen from './screens/FavoritesScreen';
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
+
+
 function DrawerNavigator() {
   return (
     <Drawer.Navigator
@@ -82,5 +84,10 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',   
+  },
 });
