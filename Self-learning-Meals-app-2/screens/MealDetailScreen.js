@@ -1,25 +1,42 @@
 import { View, Text, Image,StyleSheet,ScrollView, Button } from 'react-native';
 import {MEALS} from '../data/dummy-data';
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect,useContext } from 'react';
 import MealDetails from '../components/MealDetails';
 import SubTitle from '../components/MealDetail/SubTitle';
 import List from '../components/MealDetail/List';
 import IconButton from '../components/IconButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFavorite, removeFavorite } from '../store/redux/favorites';
+//import { FavoritesContext } from '../store/context/favorites-context';
 
 function MealDetailScreen({ route, navigation }) {      
+ //   const favoritesMealCtx = useContext(FavoritesContext);
+    const favoriteMealIds = useSelector((state) => state.favoritesMeals.ids);
+
+    const dispatch = useDispatch();
+    
     const mealId = route.params.mealId;
     const selectedMeal = MEALS.find((meal) => meal.id === mealId);  
-    function headerButtonPressHandler() {
-        alert('Button tapped HEHEEHEH!');
+
+    const mealIsFavorite = favoriteMealIds.includes(mealId);
+
+    function changeFavoriteStatusHandler() {
+        if(mealIsFavorite){
+         //   favoritesMealCtx.removeFavorite(mealId);
+          dispatch(removeFavorite({id: mealId}));
+        } else{
+          //  favoritesMealCtx.addFavorite(mealId);
+           dispatch(addFavorite({id: mealId}));
+        }
     }
      useLayoutEffect(() =>{
          navigation.setOptions({
                 title: selectedMeal.title,
                 headerRight: () =>{
-                  return <IconButton icon="star" color="white" onPress={headerButtonPressHandler} />
+                  return <IconButton icon={mealIsFavorite ? "star" : "star-outline"} color="white" onPress={changeFavoriteStatusHandler} />
                 }
             });
-        },[headerButtonPressHandler, navigation]);
+        },[changeFavoriteStatusHandler, navigation]);
     return (
         <ScrollView style={styles.rootContainer}>    
         <View>
