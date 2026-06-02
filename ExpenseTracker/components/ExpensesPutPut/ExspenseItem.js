@@ -3,11 +3,12 @@ import { GlobalStyles  } from "../../constants/styles";
 import { getFormattedDate } from "../../util/date";
 import { useNavigation } from "@react-navigation/native";
 
-function ExpenseItem( { description, amount, date } ) { 
+function ExpenseItem( { id, description, amount, date } ) { 
     const navigation = useNavigation();
-
+   
     function pressHandler() {
-        navigation.navigate('ManageExpense');
+         console.log("id:", id);
+        navigation.navigate('ManageExpense', { expenseId: id });
     }
     return (
         <Pressable onPress={pressHandler} style={({pressed}) => pressed && styles.pressed}>
