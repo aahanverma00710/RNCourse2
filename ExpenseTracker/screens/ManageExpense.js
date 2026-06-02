@@ -3,14 +3,23 @@ import { View, StyleSheet, Text } from "react-native";
 import IconButton from "../UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
 import Button from "../UI/Button";
+import { useContext } from "react";
+import { ExpensesContext } from "../store/expenses-context";
     
 function ManageExpense({route,navigation}) {
     const editedExpenseId = route.params?.expenseId;
 
     const isEditing = !!editedExpenseId;
 
+    const expensesContext = useContext(ExpensesContext);
+
     function deleteExpenseHandler() {
         console.log("Deleting expense...");
+        if(isEditing) {
+            console.log("Expense ID:", editedExpenseId);
+            expensesContext.deleteExpense(editedExpenseId);
+        }
+       
         navigation.goBack();
     }
     function canelHandler() {
@@ -19,8 +28,18 @@ function ManageExpense({route,navigation}) {
     function confirmHandler() {
         if(isEditing) {
             console.log("Updating expense...");
+            expensesContext.updateExpense(editedExpenseId, {
+                description: 'Test',
+                amount: 19.99,
+                date: new Date()
+            });
         } else {
             console.log("Adding expense...");
+            expensesContext.addExpense({
+                description: 'Test',
+                amount: 19.99,
+                date: new Date()
+            });
         }
         navigation.goBack();
     }
