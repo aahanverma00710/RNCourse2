@@ -1,6 +1,6 @@
 import { Text } from "react-native";
 import ExpensesOutput from "../components/ExpensesPutPut/ExpensesOutPut";
-import { use, useContext } from "react";
+import { useContext } from "react";
 import { ExpensesContext } from "../store/expenses-context";
 
 function AllExpense() {

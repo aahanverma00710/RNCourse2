@@ -5,7 +5,8 @@ import { GlobalStyles } from "../constants/styles";
 import Button from "../UI/Button";
 import { useContext } from "react";
 import { ExpensesContext } from "../store/expenses-context";
-    
+import ExpenseForm from "../components/ManageExpenses/ExpenseForm";   
+
 function ManageExpense({route,navigation}) {
     const editedExpenseId = route.params?.expenseId;
 
@@ -49,6 +50,7 @@ function ManageExpense({route,navigation}) {
         });
     }, [navigation, isEditing]);
     return <View style={styles.container}>
+        <ExpenseForm />
         <View style={styles.buttons}>
             <Button style={styles.button} onPress={canelHandler} mode='flat'>
                 Cancel
