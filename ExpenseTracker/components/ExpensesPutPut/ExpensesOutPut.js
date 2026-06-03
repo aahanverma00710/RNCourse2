@@ -1,14 +1,14 @@
 import { View, StyleSheet } from "react-native";
 import ExpensesSummary from "./ExpensesSummary";
 import ExpensesList from "./ExpensesList";
-import { GlobalStyles  } from "../../constants/styles";
+import { GlobalStyles } from "../../constants/styles";
 
 
-function ExpensesOutput({expenses,expensesPeriod}) { 
+function ExpensesOutput({ expenses, expensesPeriod }) {
     return <View style={styles.container}>
         <ExpensesSummary periodName={expensesPeriod} expenses={expenses} />
         <ExpensesList expenses={expenses} />
-       
+
     </View>
 }
 
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         backgroundColor: GlobalStyles.colors.primary700,
         borderRadius: 6,
     },
-    period: {       
+    period: {
         fontSize: 12,
         color: GlobalStyles.colors.primary400
     },
