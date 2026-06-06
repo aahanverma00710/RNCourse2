@@ -6,6 +6,7 @@ import Button from "../UI/Button";
 import { useContext } from "react";
 import { ExpensesContext } from "../store/expenses-context";
 import ExpenseForm from "../components/ManageExpenses/ExpenseForm";
+import { storeExpense } from "../util/http";
 
 function ManageExpense({ route, navigation }) {
     const editedExpenseId = route.params?.expenseId;
@@ -37,19 +38,15 @@ function ManageExpense({ route, navigation }) {
     function confirmHandler(expenseData) {
         if (isEditing) {
             console.log("Updating expense...");
-            expensesContext.updateExpense(editedExpenseId, {
-                description: expenseData.description,
-                amount: expenseData.amount,
-                date: expenseData.date
-            });
+            expensesContext.updateExpense(editedExpenseId, expenseData);
         } else {
             console.log("Adding expense...");
+            storeExpense(expenseData);
             expensesContext.addExpense({
-                description: expenseData.description,
-                amount: expenseData.amount,
-                date: expenseData.date
+                expenseData
             });
         }
+
         navigation.goBack();
     }
 
