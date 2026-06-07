@@ -2,15 +2,15 @@ import { useLayoutEffect } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import IconButton from "../UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
-import Button from "../UI/Button";
-import { useContext } from "react";
+import LodingOverlay from "../UI/LodingOverlay";
+import { useContext, useState } from "react";
 import { ExpensesContext } from "../store/expenses-context";
 import ExpenseForm from "../components/ManageExpenses/ExpenseForm";
 import { storeExpense, updateExpense, deleteExpense } from "../util/http";
 
 function ManageExpense({ route, navigation }) {
     const editedExpenseId = route.params?.expenseId;
-
+    const [isFetching, setIsFetching] = useState(false)
     const isEditing = !!editedExpenseId;
     const expensesContext = useContext(ExpensesContext);
     const selectedExpense = expensesContext.expenses.find(expense => expense.id === editedExpenseId);
@@ -23,12 +23,14 @@ function ManageExpense({ route, navigation }) {
 
 
 
-    function deleteExpenseHandler() {
+    async function deleteExpenseHandler() {
         console.log("Deleting expense...");
         if (isEditing) {
             console.log("Expense ID:", editedExpenseId);
+            setIsFetching(true)
+            await deleteExpense(editedExpenseId)
+            setIsFetching(false)
             expensesContext.deleteExpense(editedExpenseId);
-            deleteExpense(editedExpenseId)
         }
 
         navigation.goBack();
@@ -40,16 +42,22 @@ function ManageExpense({ route, navigation }) {
         if (isEditing) {
             console.log("Updating expense...");
             expensesContext.updateExpense(editedExpenseId, expenseData);
-            updateExpense(editedExpenseId, expenseData)
+            setIsFetching(true)
+            await updateExpense(editedExpenseId, expenseData)
+            setIsFetching(false)
         } else {
+            setIsFetching(true)
             const id = await storeExpense(expenseData);
             expensesContext.addExpense({ ...expenseData, id: id });
+            setIsFetching(false)
 
         }
 
         navigation.goBack();
     }
-
+    if (isFetching) {
+        return <LodingOverlay />
+    }
     return <View style={styles.container}>
         <ExpenseForm
             onCancel={canelHandler}
