@@ -6,7 +6,7 @@ import Button from "../UI/Button";
 import { useContext } from "react";
 import { ExpensesContext } from "../store/expenses-context";
 import ExpenseForm from "../components/ManageExpenses/ExpenseForm";
-import { storeExpense, updateExpense } from "../util/http";
+import { storeExpense, updateExpense, deleteExpense } from "../util/http";
 
 function ManageExpense({ route, navigation }) {
     const editedExpenseId = route.params?.expenseId;
@@ -28,6 +28,7 @@ function ManageExpense({ route, navigation }) {
         if (isEditing) {
             console.log("Expense ID:", editedExpenseId);
             expensesContext.deleteExpense(editedExpenseId);
+            deleteExpense(editedExpenseId)
         }
 
         navigation.goBack();
@@ -35,15 +36,15 @@ function ManageExpense({ route, navigation }) {
     function canelHandler() {
         navigation.goBack();
     }
-    function confirmHandler(expenseData) {
+    async function confirmHandler(expenseData) {
         if (isEditing) {
             console.log("Updating expense...");
-            //expensesContext.updateExpense(editedExpenseId, expenseData);
-            updateExpense(editedExpenseId, expenseData);
+            expensesContext.updateExpense(editedExpenseId, expenseData);
+            updateExpense(editedExpenseId, expenseData)
         } else {
-            console.log("Adding expense...");
-            storeExpense(expenseData);
-            //  expensesContext.addExpense({expenseData});
+            const id = await storeExpense(expenseData);
+            expensesContext.addExpense({ ...expenseData, id: id });
+
         }
 
         navigation.goBack();

@@ -9,7 +9,11 @@ import { fetchExpenses } from "../util/http";
 function RecentExpenses() {
     const expensesContext = useContext(ExpensesContext);
     useEffect(() => {
-        fetchExpenses()
+        async function getExpenses() {
+            const expenses = await fetchExpenses();
+            expensesContext.setExpenses(expenses);
+        }
+        getExpenses();
     }, []);
     const recentExpenses = expensesContext.expenses.filter((expense) => {
         const today = new Date();
