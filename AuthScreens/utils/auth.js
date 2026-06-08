@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_KEY = 'AIzaSyBGs96IXgEVyTrbSfrSXAJQuwS7yIB1FDI'
+const API_KEY = process.env.EXPO_PUBLIC_FIREBASE_API_KEY
 
 export async function createUser(email, password) {
     await authenticate('signUp', email, password)
